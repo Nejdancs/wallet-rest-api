@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
     const data = await Test.find();
     console.log(data);
 
-    res.status(200).json({ message: "it's work", data });
+    res.status(200).json({ message: "Yeeeh! it's work", data });
 });
 
 module.exports = router;
