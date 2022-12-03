@@ -10,7 +10,7 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
 const options = {
-    customCss: ".swagger-ui .topbar { display: block }",
+    customCss: ".swagger-ui .topbar { display: none }",
 };
 
 module.exports = swaggerUi.setup(swaggerDocs, options);
