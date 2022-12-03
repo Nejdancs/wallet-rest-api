@@ -2,7 +2,8 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
-const swagger = require("./swagger");
+// const swagger = require("./swagger");
+const swaggerDocument = require("./swagger.json");
 const path = require("path");
 
 const authRouter = require("./routes/api/auth");
@@ -17,7 +18,12 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 app.use(express.static(pathPublic));
-app.use("/api-docs", swaggerUi.serve, swagger);
+
+const options = {
+    customCssUrl: "./public/swagger-ui.css",
+};
+app.use("/api-docs", swaggerUi.serve);
+app.get("/api-docs", swaggerUi.setup(swaggerDocument, options));
 
 app.use("/api/auth", authRouter);
 app.use("/api/users", usersRouter);
