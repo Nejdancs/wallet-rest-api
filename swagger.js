@@ -10,7 +10,7 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
 const options = {
-    customCssUrl: "/public/swagger-ui.css",
+    customCssUrl: "./public/swagger-ui.css",
 };
 
 module.exports = swaggerUi.setup(swaggerDocs, options);
