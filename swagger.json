@@ -15,6 +15,10 @@
         {
             "name": "Auth",
             "description": "Authorization endpoints"
+        },
+        {
+            "name": "Users",
+            "description": "Users endpoints"
         }
     ],
     "paths": {
@@ -23,7 +27,6 @@
                 "tags": ["Auth"],
                 "summary": "User registration",
                 "parameters": [],
-                "security": [{ "Bearer": [] }],
                 "requestBody": {
                     "description": "Registration's object",
                     "required": true,
@@ -62,6 +65,111 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/RegistrationConflict"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": ["Auth"],
+                "summary": "Logs user into the system",
+                "parameters": [],
+                "requestBody": {
+                    "description": "Login's object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginBadRequest"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Email or password is wrong",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginUnauthorized"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/logout": {
+            "post": {
+                "tags": ["Auth"],
+                "summary": "Logs out current logged in user session",
+                "parameters": [],
+                "security": [{ "Bearer": [] }],
+
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Not authorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LogOutUnauthorized"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/current": {
+            "get": {
+                "tags": ["Users"],
+                "summary": "Get current user",
+                "parameters": [],
+                "security": [{ "Bearer": [] }],
+
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CurrentUserResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Token expired or invalid",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CurrentUserInvalidToken"
                                 }
                             }
                         }
@@ -136,18 +244,6 @@
                             }
                         }
                     }
-                },
-                "example": {
-                    "status": "success",
-                    "code": 201,
-                    "data": {
-                        "token": "string",
-                        "user": {
-                            "name": "Chuck Norris",
-                            "email": "user@example.com",
-                            "balance": 0
-                        }
-                    }
                 }
             },
             "RegistrationBadRequest": {
@@ -168,11 +264,6 @@
                         "description": "error message",
                         "example": "Please fill a valid password"
                     }
-                },
-                "example": {
-                    "status": "error",
-                    "code": 400,
-                    "message": "Please fill a valid password"
                 }
             },
             "RegistrationConflict": {
@@ -193,11 +284,188 @@
                         "description": "error message",
                         "example": "User with example@gmail.com already exist"
                     }
-                },
-                "example": {
-                    "status": "error",
-                    "code": 409,
-                    "message": "User with example@gmail.com already exist"
+                }
+            },
+            "LoginRequest": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "description": "User's email",
+                        "format": "email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "User's password",
+                        "example": "qwerty123"
+                    }
+                }
+            },
+            "LoginResponse": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "status",
+                        "example": "success"
+                    },
+                    "code": {
+                        "type": "integer",
+                        "description": "status code",
+                        "example": 200
+                    },
+                    "data": {
+                        "type": "object",
+
+                        "properties": {
+                            "token": {
+                                "type": "string",
+                                "description": "Access token"
+                            },
+                            "user": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "description": "User name",
+                                        "example": "Chuck Norris"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "description": "User's email",
+                                        "format": "email"
+                                    },
+                                    "balance": {
+                                        "type": "integer",
+                                        "description": "User's balance",
+                                        "example": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "LoginBadRequest": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "status",
+                        "example": "error"
+                    },
+                    "code": {
+                        "type": "integer",
+                        "description": "status code",
+                        "example": 400
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "error message",
+                        "example": "Please fill a valid email address"
+                    }
+                }
+            },
+            "LoginUnauthorized": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "status",
+                        "example": "error"
+                    },
+                    "code": {
+                        "type": "integer",
+                        "description": "status code",
+                        "example": 401
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "error message",
+                        "example": "Email or password is wrong"
+                    }
+                }
+            },
+            "LogOutUnauthorized": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "status",
+                        "example": "error"
+                    },
+                    "code": {
+                        "type": "integer",
+                        "description": "status code",
+                        "example": 401
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "error message",
+                        "example": "Not authorized"
+                    }
+                }
+            },
+            "CurrentUserResponse": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "status",
+                        "example": "success"
+                    },
+                    "code": {
+                        "type": "integer",
+                        "description": "status code",
+                        "example": 200
+                    },
+                    "data": {
+                        "type": "object",
+
+                        "properties": {
+                            "user": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "description": "User name",
+                                        "example": "Chuck Norris"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "description": "User's email",
+                                        "format": "email"
+                                    },
+                                    "balance": {
+                                        "type": "integer",
+                                        "description": "User's balance",
+                                        "example": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "CurrentUserInvalidToken": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "status",
+                        "example": "error"
+                    },
+                    "code": {
+                        "type": "integer",
+                        "description": "status code",
+                        "example": 401
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "error message",
+                        "example": "jwt expired"
+                    }
                 }
             }
         },

@@ -23,7 +23,11 @@ const auth = async (req, _, next) => {
         req.user = user;
         next();
     } catch (error) {
-        if (error.message === "Invalid signature" || error.message === "jwt expired") {
+        if (
+            error.message === "Invalid signature" ||
+            error.message === "jwt expired" ||
+            error.message === "invalid token"
+        ) {
             error.status = 401;
         }
         next(error);
