@@ -4,11 +4,7 @@ const router = express.Router();
 
 const swaggerUi = require("swagger-ui-express");
 // const swagger = require("./swagger");
-const swaggerDocument = require("./swagger.json");
-const path = require("path");
-
-const pathPublic = path.join(__dirname, "public");
-router.use("/public", express.static(pathPublic));
+const swaggerDocument = require("../../swagger.json");
 
 const options = {
     customCssUrl: "./public/swagger-ui.css",
