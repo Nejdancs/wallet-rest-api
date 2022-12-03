@@ -10,6 +10,7 @@ const userSchema = Schema(
             type: String,
             minLength: 1,
             maxLength: 12,
+            trim: true,
             required: [true, "Name is required"],
             match: [nameRegExp, "Please fill a valid name"],
         },
