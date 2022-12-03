@@ -1,13 +1,16 @@
 {
-    "openapi": "3.0.3",
+    "openapi": "3.0.1",
     "info": {
         "version": "0.0.1",
         "title": "Wallet",
-        "description": "[ Base URL: wallet-rest-api.vercel.app/ ]"
+        "description": "[ Base URL: https://wallet-api-qlh0.onrender.com/ ]"
     },
     "consumes": ["application/json"],
     "produces": ["application/json"],
-    "servers": [{ "url": "https://wallet-rest-api.vercel.app/" }],
+    "servers": [
+        { "url": "https://wallet-api-qlh0.onrender.com/" },
+        { "url": "http://localhost:3000/" }
+    ],
     "tags": [
         {
             "name": "Auth",
