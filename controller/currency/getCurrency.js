@@ -14,8 +14,8 @@ const getCurrency = async (_, res) => {
         const result = slicedData.map((el) => ({
             currencyA: currencyCode[el.currencyCodeA],
             currencyB: currencyCode[el.currencyCodeB],
-            rateBuy: String(el.rateBuy.toFixed(2)),
-            rateSell: String(el.rateSell.toFixed(2)),
+            rateBuy: String(el.rateBuy.toFixed(5)),
+            rateSell: String(el.rateSell.toFixed(5)),
         }));
 
         return result;
@@ -30,16 +30,16 @@ const getCurrency = async (_, res) => {
             .map((el) => ({
                 currencyA: el.ccy,
                 currencyB: el.base_ccy,
-                rateBuy: String(Number(el.buy).toFixed(2)),
-                rateSell: String(Number(el.sale).toFixed(2)),
+                rateBuy: String(Number(el.buy).toFixed(5)),
+                rateSell: String(Number(el.sale).toFixed(5)),
             }))
             .reverse();
 
         result.push({
             currencyA: result[0].currencyA,
             currencyB: result[1].currencyA,
-            rateBuy: String((result[0].rateBuy / result[1].rateBuy).toFixed(2)),
-            rateSell: String((result[0].rateSell / result[1].rateSell).toFixed(2)),
+            rateBuy: String((result[0].rateBuy / result[1].rateBuy).toFixed(5)),
+            rateSell: String((result[0].rateSell / result[1].rateSell).toFixed(5)),
         });
 
         return result;
