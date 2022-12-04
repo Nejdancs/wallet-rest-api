@@ -18,7 +18,6 @@ const getCurrency = async (_, res) => {
             currencyB: currencyCode[el.currencyCodeB],
             rateBuy: el.rateBuy,
             rateSell: el.rateSell,
-            api: "mono",
         }));
 
         return result;
@@ -36,13 +35,19 @@ const getCurrency = async (_, res) => {
             currencyB: el.base_ccy,
             rateBuy: el.buy,
             rateSell: el.sale,
-            api: "privat",
         }));
+
+        result.push({
+            currencyA: "EUR",
+            currencyB: "USD",
+            rateBuy: result[0].buy / result[1].buy,
+            rateSell: result[0].sale / result[1].sale,
+        });
 
         return result;
     };
 
-    const result = await Promise.race([monoApi(), privatApi()]);
+    const result = await Promise.race([privatApi()]);
 
     res.status(200).json({
         status: "success",
