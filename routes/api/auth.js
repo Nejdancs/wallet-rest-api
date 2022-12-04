@@ -6,7 +6,7 @@ const { joiRegisterSchema, joiLoginSchema } = require("../../models");
 
 const router = express.Router();
 
-router.post("/signup", validation(joiRegisterSchema), ctrlWrapper(ctrl.signup));
+router.post("/signup", validation(joiRegisterSchema), ctrlWrapper(ctrl.signUp));
 
 router.post("/login", validation(joiLoginSchema), ctrlWrapper(ctrl.login));
 

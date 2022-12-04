@@ -2,7 +2,7 @@ const { User } = require("../../models");
 const { Conflict } = require("http-errors");
 const { generateToken } = require("../../helpers");
 
-const signup = async (req, res) => {
+const signUp = async (req, res) => {
     const { email, password, name } = req.body;
 
     const user = await User.findOne({ email });
@@ -29,4 +29,4 @@ const signup = async (req, res) => {
     });
 };
 
-module.exports = signup;
+module.exports = signUp;
