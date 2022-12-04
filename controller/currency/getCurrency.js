@@ -26,12 +26,14 @@ const getCurrency = async (_, res) => {
             "https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=11"
         );
 
-        const result = data.map((el) => ({
-            currencyA: el.ccy,
-            currencyB: el.base_ccy,
-            rateBuy: String(Number(el.buy).toFixed(2)),
-            rateSell: String(Number(el.sale).toFixed(2)),
-        }));
+        const result = data
+            .map((el) => ({
+                currencyA: el.ccy,
+                currencyB: el.base_ccy,
+                rateBuy: String(Number(el.buy).toFixed(2)),
+                rateSell: String(Number(el.sale).toFixed(2)),
+            }))
+            .reverse();
 
         result.push({
             currencyA: result[0].currencyA,
