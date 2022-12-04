@@ -1,31 +1,28 @@
 const axios = require("axios");
 
 const getCurrency = async (_, res) => {
-    // const monoApi = async () => {
-    //     console.log("Mono");
+    const monoApi = async () => {
+        const currencyCode = {
+            804: "USD",
+            978: "EUR",
+            980: "UAH",
+        };
 
-    //     const currencyCode = {
-    //         804: "USD",
-    //         978: "EUR",
-    //         980: "UAH",
-    //     };
+        const { data } = await axios.get("https://api.monobank.ua/bank/currency");
+        const slicedData = data.slice(0, 3);
 
-    //     const { data } = await axios.get("https://api.monobank.ua/bank/currency");
-    //     const slicedData = data.slice(0, 3);
+        const result = slicedData.map((el) => ({
+            currencyA: currencyCode[el.currencyCodeA],
+            currencyB: currencyCode[el.currencyCodeB],
+            rateBuy: String(el.rateBuy.toFixed(2)),
+            rateSell: String(el.rateSell.toFixed(2)),
+            api: "mono",
+        }));
 
-    //     const result = slicedData.map((el) => ({
-    //         currencyA: currencyCode[el.currencyCodeA],
-    //         currencyB: currencyCode[el.currencyCodeB],
-    //         rateBuy: el.rateBuy,
-    //         rateSell: el.rateSell,
-    //     }));
-
-    //     return result;
-    // };
+        return result;
+    };
 
     const privatApi = async () => {
-        console.log("Privat");
-
         const { data } = await axios.get(
             "https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=11"
         );
@@ -33,21 +30,23 @@ const getCurrency = async (_, res) => {
         const result = data.map((el) => ({
             currencyA: el.ccy,
             currencyB: el.base_ccy,
-            rateBuy: el.buy,
-            rateSell: el.sale,
+            rateBuy: el.buy.toFixed(2),
+            rateSell: el.sale.toFixed(2),
+            api: "privat",
         }));
 
         result.push({
-            currencyA: "EUR",
-            currencyB: "USD",
-            rateBuy: result[0].buy / result[1].buy,
-            rateSell: result[0].sale / result[1].sale,
+            currencyA: result[0].currencyA,
+            currencyB: result[1].currencyA,
+            rateBuy: String((result[0].rateBuy / result[1].rateBuy).toFixed(2)),
+            rateSell: String((result[0].rateSell / result[1].rateSell).toFixed(2)),
         });
+        console.log(result);
 
         return result;
     };
 
-    const result = await Promise.race([privatApi()]);
+    const result = await Promise.race([privatApi(), monoApi()]);
 
     res.status(200).json({
         status: "success",
