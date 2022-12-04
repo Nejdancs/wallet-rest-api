@@ -36,8 +36,8 @@ const getCurrency = async (_, res) => {
             .reverse();
 
         result.push({
-            currencyA: result[0].currencyA,
-            currencyB: result[1].currencyA,
+            currencyA: result[1].currencyA,
+            currencyB: result[0].currencyA,
             rateBuy: String((result[1].rateBuy / result[0].rateBuy).toFixed(5)),
             rateSell: String((result[1].rateSell / result[0].rateSell).toFixed(5)),
         });
