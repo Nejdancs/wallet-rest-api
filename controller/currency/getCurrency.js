@@ -16,7 +16,6 @@ const getCurrency = async (_, res) => {
             currencyB: currencyCode[el.currencyCodeB],
             rateBuy: String(el.rateBuy.toFixed(2)),
             rateSell: String(el.rateSell.toFixed(2)),
-            api: "mono",
         }));
 
         return result;
@@ -32,7 +31,6 @@ const getCurrency = async (_, res) => {
             currencyB: el.base_ccy,
             rateBuy: String(Number(el.buy).toFixed(2)),
             rateSell: String(Number(el.sale).toFixed(2)),
-            api: "privat",
         }));
 
         result.push({
