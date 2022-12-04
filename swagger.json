@@ -3,7 +3,7 @@
     "info": {
         "version": "0.0.1",
         "title": "Wallet",
-        "description": "[ Base URL: https://wallet-test.onrender.com ]"
+        "description": "[ Base URL: https://wallet-test.onrender.com/ ]"
     },
     "consumes": ["application/json"],
     "produces": ["application/json"],
