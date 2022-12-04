@@ -30,8 +30,8 @@ const getCurrency = async (_, res) => {
         const result = data.map((el) => ({
             currencyA: el.ccy,
             currencyB: el.base_ccy,
-            rateBuy: String(+el.buy.toFixed(2)),
-            rateSell: String(+el.sale.toFixed(2)),
+            rateBuy: String(Number(el.buy).toFixed(2)),
+            rateSell: String(Number(el.sale).toFixed(2)),
             api: "privat",
         }));
 
@@ -41,20 +41,19 @@ const getCurrency = async (_, res) => {
             rateBuy: String((result[0].rateBuy / result[1].rateBuy).toFixed(2)),
             rateSell: String((result[0].rateSell / result[1].rateSell).toFixed(2)),
         });
-        console.log(result);
 
         return result;
     };
 
-    const result = await Promise.race([privatApi(), monoApi()]);
+    const promiseArr = await Promise.allSettled([privatApi(), monoApi()]);
+
+    const result = promiseArr.find((el) => el.status === "fulfilled");
 
     res.status(200).json({
         status: "success",
         code: 200,
         data: {
-            user: {
-                message: result,
-            },
+            currency: result.value,
         },
     });
 };
