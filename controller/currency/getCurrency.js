@@ -30,8 +30,8 @@ const getCurrency = async (_, res) => {
         const result = data.map((el) => ({
             currencyA: el.ccy,
             currencyB: el.base_ccy,
-            rateBuy: el.buy.toFixed(2),
-            rateSell: el.sale.toFixed(2),
+            rateBuy: String(+el.buy.toFixed(2)),
+            rateSell: String(+el.sale.toFixed(2)),
             api: "privat",
         }));
 
