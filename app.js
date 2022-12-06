@@ -7,6 +7,7 @@ const swaggerDocument = require("./swagger.json");
 const authRouter = require("./routes/api/auth");
 const usersRouter = require("./routes/api/users");
 const statisticsRouter = require("./routes/api/statistics");
+const transactionsRouter = require("./routes/api/transactions");
 
 const app = express();
 
@@ -20,16 +21,17 @@ app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/statistics", statisticsRouter);
+app.use("/api/transactions", transactionsRouter);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use((_, res) => {
-  res.status(404).json({ status: "error", code: 404, message: "Not found" });
+    res.status(404).json({ status: "error", code: 404, message: "Not found" });
 });
 
 app.use((err, _, res, __) => {
-  const { status = 500, message = "Server error" } = err;
-  res.status(status).json({ status: "error", code: status, message });
+    const { status = 500, message = "Server error" } = err;
+    res.status(status).json({ status: "error", code: status, message });
 });
 
 module.exports = app;
