@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
-const { handleSaveErrors } = require("../helpers");
+const { handleSaveErrors, formattedDate } = require("../helpers");
 
 const transactionSchema = Schema(
   {
@@ -15,12 +15,12 @@ const transactionSchema = Schema(
       required: [true, "Type is required"],
     },
     category: {
-      //   type: Schema.Types.ObjectId,
-      //   ref: "category",
-      //   required: [true, "Category is required"],
-      // временно
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: "category",
       required: [true, "Category is required"],
+      // временно
+      // type: String,
+      // required: [true, "Category is required"],
     },
     amount: {
       type: Number,
@@ -33,14 +33,12 @@ const transactionSchema = Schema(
     },
     month: {
       type: Number,
-      min: 0,
-      max: 11,
-      required: true,
     },
     year: {
       type: Number,
-      min: 2000,
-      required: true,
+    },
+    balance: {
+      type: Number,
     },
     comment: {
       type: String,
@@ -48,6 +46,8 @@ const transactionSchema = Schema(
   },
   { versionKey: false, timestamps: true }
 );
+
+transactionSchema.pre("save", formattedDate);
 
 transactionSchema.post("save", handleSaveErrors);
 
