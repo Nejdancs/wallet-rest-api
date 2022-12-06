@@ -1,17 +1,28 @@
+const { Transaction } = require("../../models");
+
 const getStatistics = async (req, res) => {
-  const { email, name, balance } = req.user;
+  const { _id } = req.user;
   const { month, year } = req.body;
 
-  res.status(200).json({
-    status: "success",
-    code: 200,
-    data: {
-      user: {
-        email,
-        name,
-        balance,
-      },
+  const expenses = Transaction.aggregate([
+    { $match: { owner: _id, type: "expense", month, year } },
+    { $group: { _id: null, totalSum: { $sum: "$amount" } } },
+    {
+      $project: { _id: null, category: "_id.category", totalSum: "$totalSum" },
     },
+  ]);
+
+  const income = Transaction.aggregate([
+    { $match: { owner: _id, type: "income", month, year } },
+    { $group: { _id: null, totalSum: { $sum: "$amount" } } },
+    {
+      $project: { _id: null, category: "_id.category", totalSum: "$totalSum" },
+    },
+  ]);
+
+  res.status(200).json({
+    expenses,
+    income,
   });
 };
 
