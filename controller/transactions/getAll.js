@@ -9,10 +9,16 @@ const getAll = async (req, res) => {
     const count = await Transaction.count({ owner: id });
     const totalPages = Math.ceil(count / limit);
 
+    if (isNaN(totalPages)) {
+        throw new BadRequest(`Invalid limit: They are expected to be an integer.`);
+    }
+
+    if (isNaN(page)) {
+        throw new BadRequest(`Invalid page: They are expected to be an integer.`);
+    }
+
     if (Number(page) < 1 || Number(page) > totalPages) {
-        throw new BadRequest(
-            `Invalid page: Pages start at 1 and max at ${totalPages}. They are expected to be an integer.`
-        );
+        throw new BadRequest(`Invalid page: Pages start at 1 and max at ${totalPages}.`);
     }
 
     const data = await Transaction.find({ owner: id }, "", {
