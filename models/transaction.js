@@ -33,8 +33,8 @@ const transactionSchema = Schema(
     },
     month: {
       type: Number,
-      min: 1,
-      max: 12,
+      min: 0,
+      max: 11,
       required: true,
     },
     year: {
