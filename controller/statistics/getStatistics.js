@@ -4,26 +4,39 @@ const getStatistics = async (req, res) => {
   const { _id } = req.user;
   const { month, year } = req.body;
 
-  const expenses = Transaction.aggregate([
+  const expenses = await Transaction.aggregate([
     { $match: { owner: _id, type: "expense", month, year } },
-    { $group: { _id: null, totalSum: { $sum: "$amount" } } },
-    {
-      $project: { _id: null, category: "_id.category", totalSum: "$totalSum" },
-    },
+    { $group: { _id: "$category", totalAmount: { $sum: "$amount" } } },
   ]);
 
-  const income = Transaction.aggregate([
+  const totalExpenses = expenses.reduce((acc, elememt) => {
+    return acc + elememt.totalAmount;
+  }, 0);
+
+  const income = await Transaction.aggregate([
     { $match: { owner: _id, type: "income", month, year } },
-    { $group: { _id: null, totalSum: { $sum: "$amount" } } },
-    {
-      $project: { _id: null, category: "_id.category", totalSum: "$totalSum" },
-    },
+    { $group: { _id: "$category", totalAmount: { $sum: "$amount" } } },
   ]);
+
+  const totalIncome = income.reduce(
+    (acc, elememt) => acc + elememt.totalAmount,
+    0
+  );
+
+  console.log(income);
 
   res.status(200).json({
-    expenses,
-    income,
+    status: "success",
+    code: 200,
+    data: {
+      expenses,
+      totalExpenses,
+      totalIncome,
+    },
   });
+  // res.status(200).json({
+  //   expenses,
+  // });
 };
 
 module.exports = getStatistics;
