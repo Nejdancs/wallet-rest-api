@@ -66,9 +66,19 @@ const joiCreateTransactionSchema = Joi.object({
   }),
 });
 
+const joiStatisticFilterSchema = Joi.object({
+  month: Joi.number().min(0).max(11).messages({
+    "string.pattern.base": `Please fill a valid number of month`,
+  }),
+  year: Joi.number().min(2000).messages({
+    "string.pattern.base": `Please fill a valid number of month`,
+  }),
+});
+
 const Transaction = model("transaction", transactionSchema);
 
 module.exports = {
   Transaction,
   joiCreateTransactionSchema,
+  joiStatisticFilterSchema,
 };
