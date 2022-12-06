@@ -1,7 +1,6 @@
 const { User, Transaction } = require("../../models");
 
 const getTrans = async (req, res) => {
-  const { type, category, amount, date, comment } = req.body;
   const { _id } = req.user;
 
   const transactions = await Transaction.find({ owner: _id });

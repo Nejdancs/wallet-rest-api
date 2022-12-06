@@ -23,8 +23,6 @@ const getStatistics = async (req, res) => {
     0
   );
 
-  console.log(income);
-
   res.status(200).json({
     status: "success",
     code: 200,
@@ -34,9 +32,6 @@ const getStatistics = async (req, res) => {
       totalIncome,
     },
   });
-  // res.status(200).json({
-  //   expenses,
-  // });
 };
 
 module.exports = getStatistics;
