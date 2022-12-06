@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
-const { handleSaveErrors } = require("../helpers");
+const { handleSaveErrors, formattedDate } = require("../helpers");
 
 const transactionSchema = Schema(
     {
@@ -35,20 +35,19 @@ const transactionSchema = Schema(
             type: Number,
             min: 1,
             max: 12,
-            required: true,
         },
-        day: {
+        year: {
             type: Number,
-            min: 1,
-            max: 31,
-            required: true,
         },
         comment: {
             type: String,
+            default: null,
         },
     },
     { versionKey: false, timestamps: true }
 );
+
+transactionSchema.pre("save", formattedDate);
 
 transactionSchema.post("save", handleSaveErrors);
 

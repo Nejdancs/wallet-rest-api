@@ -1,3 +1,4 @@
 const getAll = require("./getAll");
+const add = require("./add");
 
-module.exports = { getAll };
+module.exports = { getAll,add };
