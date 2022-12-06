@@ -33,9 +33,12 @@ const transactionSchema = Schema(
         },
         month: {
             type: Number,
+            min: 1,
+            max: 12,
         },
         year: {
             type: Number,
+            min: 2000,
         },
         balance: {
             type: Number,
@@ -52,33 +55,22 @@ transactionSchema.pre("save", formattedDate);
 transactionSchema.post("save", handleSaveErrors);
 
 const joiCreateTransactionSchema = Joi.object({
-    type: Joi.string().valueOf(["income", "expense"]).required().messages({
-        "string.pattern.base": `Please fill a valid type of transaction`,
-    }),
-    category: Joi.string().required().messages({
-        "string.pattern.base": `Please fill a valid category of transaction`,
-    }),
-    amount: Joi.number().min(0.01).required().messages({
-        "string.pattern.base": `Please fill a valid amount`,
-    }),
-    comment: Joi.string().max(100).messages({
-        "string.pattern.base": `Comment must be less then 100 characters`,
-    }),
+    type: Joi.string().valid("income", "expense").required(),
+    category: Joi.string().required(),
+    date: Joi.date().min("2000-01-01").required(),
+    amount: Joi.number().min(0.01).required(),
+    comment: Joi.string().max(100),
 });
 
 const joiStatisticFilterSchema = Joi.object({
-  month: Joi.number().min(0).max(11).messages({
-    "string.pattern.base": `Please fill a valid number of month`,
-  }),
-  year: Joi.number().min(2000).messages({
-    "string.pattern.base": `Please fill a valid number of month`,
-  }),
+    month: Joi.number().min(1).max(12).required(),
+    year: Joi.number().min(2000).required(),
 });
 
 const Transaction = model("transaction", transactionSchema);
 
 module.exports = {
-  Transaction,
-  joiCreateTransactionSchema,
-  joiStatisticFilterSchema,
+    Transaction,
+    joiCreateTransactionSchema,
+    joiStatisticFilterSchema,
 };

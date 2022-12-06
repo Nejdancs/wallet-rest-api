@@ -1,11 +1,26 @@
-const { Transaction, User } = require("../../models");
+const { Transaction, User, Category } = require("../../models");
+const { BadRequest } = require("http-errors");
 
 const add = async (req, res) => {
     const body = req.body;
     const { id } = req.user;
 
+    const category = await Category.findById(body.category);
+
+    if (!category) {
+        throw new BadRequest(`Category not found`);
+    }
+
     const user = await User.findById(id);
-    user.balance = body.type === "income" ? user.balance + body.amount : user.balance - body.amount;
+
+    const balance =
+        body.type === "income" ? user.balance + body.amount : user.balance - body.amount;
+
+    if (balance < 0) {
+        throw new BadRequest(`The expense amount cannot exceed the user's balance`);
+    }
+
+    user.balance = balance.toFixed(2);
 
     const data = await Transaction.create({ ...body, owner: id, balance: user.balance });
 

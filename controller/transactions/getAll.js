@@ -17,7 +17,7 @@ const getAll = async (req, res) => {
         throw new BadRequest(`Invalid page: They are expected to be an integer.`);
     }
 
-    if (Number(page) < 1 || Number(page) > totalPages) {
+    if ((Number(page) < 1 || Number(page) > totalPages) && count > 0) {
         throw new BadRequest(`Invalid page: Pages start at 1 and max at ${totalPages}.`);
     }
 

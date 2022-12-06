@@ -240,7 +240,7 @@
                 "parameters": [],
                 "security": [{ "Bearer": [] }],
                 "requestBody": {
-                    "description": "Registration's object",
+                    "description": "Transaction's object",
                     "required": true,
                     "content": {
                         "application/json": {
@@ -267,6 +267,88 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/PostTransactionsBadRequest"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Token expired or invalid",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InvalidToken"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/transactions/categories": {
+            "get": {
+                "tags": ["Transactions"],
+                "summary": "Get categories transactions",
+                "parameters": [],
+                "security": [{ "Bearer": [] }],
+
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetCategoriesResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Token expired or invalid",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InvalidToken"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/transactions/statistics": {
+            "post": {
+                "tags": ["Transactions"],
+                "summary": "Get transaction statistics",
+                "parameters": [],
+                "security": [{ "Bearer": [] }],
+                "requestBody": {
+                    "description": "Statistics object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GetStatisticsRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetStatisticsResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetStatisticsBadRequest"
                                 }
                             }
                         }
@@ -880,6 +962,158 @@
                         "type": "string",
                         "description": "error message",
                         "example": "transaction validation failed"
+                    }
+                }
+            },
+            "GetCategoriesResponse": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "status",
+                        "example": "success"
+                    },
+                    "code": {
+                        "type": "integer",
+                        "description": "status code",
+                        "example": 200
+                    },
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "expenses": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "_id": {
+                                            "type": "string",
+                                            "description": "Category id",
+                                            "example": "638f2e279decac0a0108e6d5"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "description": "Category name",
+                                            "example": "Main expenses"
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                            "description": "Category type",
+                                            "example": "expense"
+                                        }
+                                    }
+                                }
+                            },
+                            "income": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "_id": {
+                                            "type": "string",
+                                            "description": "Category id",
+                                            "example": "638f2e279decac0a0108e6df"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "description": "Category name",
+                                            "example": "Regular Income"
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                            "description": "Category type",
+                                            "example": "income"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "GetStatisticsRequest": {
+                "type": "object",
+                "required": ["month", "year"],
+                "properties": {
+                    "month": {
+                        "type": "integer",
+                        "description": "Transaction month",
+                        "max": 12,
+                        "min": 1,
+                        "example": 12
+                    },
+                    "year": {
+                        "type": "integer",
+                        "description": "Transaction year",
+                        "example": 2022
+                    }
+                }
+            },
+            "GetStatisticsResponse": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "status",
+                        "example": "success"
+                    },
+                    "code": {
+                        "type": "integer",
+                        "description": "status code",
+                        "example": 200
+                    },
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "expenses": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "_id": {
+                                            "type": "string",
+                                            "description": "Category id",
+                                            "example": "638f2e279decac0a0108e6d5"
+                                        },
+                                        "totalAmount": {
+                                            "type": "number",
+                                            "description": "Total amount",
+                                            "example": 1214.1
+                                        }
+                                    }
+                                }
+                            },
+                            "totalExpenses": {
+                                "type": "number",
+                                "description": "Total expenses",
+                                "example": 1214.1
+                            },
+                            "totalIncome": {
+                                "type": "number",
+                                "description": "Total income",
+                                "example": 1214.1
+                            }
+                        }
+                    }
+                }
+            },
+            "GetStatisticsBadRequest": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "status",
+                        "example": "error"
+                    },
+                    "code": {
+                        "type": "integer",
+                        "description": "status code",
+                        "example": 400
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "error message",
+                        "example": "statistics validation failed"
                     }
                 }
             }
