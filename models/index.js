@@ -1,5 +1,9 @@
 const { User, joiRegisterSchema, joiLoginSchema } = require("./user");
-const { Transaction, joiCreateTransactionSchema } = require("./transaction");
+const {
+  Transaction,
+  joiCreateTransactionSchema,
+  joiStatisticFilterSchema,
+} = require("./transaction");
 const { Category } = require("./category");
 
 module.exports = {
@@ -8,5 +12,6 @@ module.exports = {
   joiLoginSchema,
   Transaction,
   joiCreateTransactionSchema,
+  joiStatisticFilterSchema,
   Category,
 };
