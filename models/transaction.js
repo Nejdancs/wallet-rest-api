@@ -29,7 +29,7 @@ const transactionSchema = Schema(
         },
         date: {
             type: Date,
-            default: Date.now,
+            required: [true, "Date is required"],
         },
         month: {
             type: Number,

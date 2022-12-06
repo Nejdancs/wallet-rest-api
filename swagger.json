@@ -19,6 +19,10 @@
         {
             "name": "Users",
             "description": "Users endpoints"
+        },
+        {
+            "name": "Transactions",
+            "description": "Transactions endpoints"
         }
     ],
     "paths": {
@@ -169,7 +173,110 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/CurrentUserInvalidToken"
+                                    "$ref": "#/components/schemas/InvalidToken"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/transactions": {
+            "get": {
+                "tags": ["Transactions"],
+                "summary": "Get all transactions",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "description": "Current page",
+                        "default": 1
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "description": "Limit per page",
+                        "default": 5
+                    }
+                ],
+                "security": [{ "Bearer": [] }],
+
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetTransactionsResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid query params)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetTransactionsBadRequest"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Token expired or invalid",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InvalidToken"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Transactions"],
+                "summary": "Create transaction",
+                "parameters": [],
+                "security": [{ "Bearer": [] }],
+                "requestBody": {
+                    "description": "Registration's object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TransactionsRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PostTransactionsResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PostTransactionsBadRequest"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Token expired or invalid",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InvalidToken"
                                 }
                             }
                         }
@@ -236,9 +343,9 @@
                                         "format": "email"
                                     },
                                     "balance": {
-                                        "type": "integer",
+                                        "type": "number",
                                         "description": "User's balance",
-                                        "example": 0
+                                        "example": 3214.5
                                     }
                                 }
                             }
@@ -337,9 +444,9 @@
                                         "format": "email"
                                     },
                                     "balance": {
-                                        "type": "integer",
+                                        "type": "number",
                                         "description": "User's balance",
-                                        "example": 0
+                                        "example": 3141.5
                                     }
                                 }
                             }
@@ -438,9 +545,9 @@
                                         "format": "email"
                                     },
                                     "balance": {
-                                        "type": "integer",
+                                        "type": "number",
                                         "description": "User's balance",
-                                        "example": 0
+                                        "example": 3123.5
                                     }
                                 }
                             }
@@ -448,7 +555,7 @@
                     }
                 }
             },
-            "CurrentUserInvalidToken": {
+            "InvalidToken": {
                 "type": "object",
                 "properties": {
                     "status": {
@@ -465,6 +572,314 @@
                         "type": "string",
                         "description": "error message",
                         "example": "jwt expired"
+                    }
+                }
+            },
+            "GetTransactionsResponse": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "status",
+                        "example": "success"
+                    },
+                    "code": {
+                        "type": "integer",
+                        "description": "status code",
+                        "example": 200
+                    },
+                    "data": {
+                        "type": "object",
+
+                        "properties": {
+                            "page": {
+                                "type": "integer",
+                                "description": "Current page",
+                                "example": 1
+                            },
+                            "total_pages": {
+                                "type": "integer",
+                                "description": "Total pages",
+                                "example": 4
+                            },
+                            "total_results": {
+                                "type": "integer",
+                                "description": "Total results",
+                                "example": 20
+                            },
+                            "result": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "_id": {
+                                            "type": "string",
+                                            "description": "Transaction id",
+                                            "example": "638f6b4ecdcd2c0031204e75"
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                            "description": "Transaction type",
+                                            "example": "income"
+                                        },
+
+                                        "amount": {
+                                            "type": "number",
+                                            "description": "Transaction amount",
+                                            "example": 100.05
+                                        },
+                                        "balance": {
+                                            "type": "number",
+                                            "description": "User's balance after transaction",
+                                            "example": 2341.5
+                                        },
+                                        "comment": {
+                                            "type": "string",
+                                            "description": "Transaction comment",
+                                            "example": "Some comment"
+                                        },
+                                        "date": {
+                                            "type": "string",
+                                            "description": "Transaction date",
+                                            "example": "2022-12-06T16:18:22.502Z"
+                                        },
+                                        "month": {
+                                            "type": "integer",
+                                            "description": "Transaction month",
+                                            "example": 12
+                                        },
+                                        "year": {
+                                            "type": "integer",
+                                            "description": "Transaction year",
+                                            "example": 2022
+                                        },
+                                        "category": {
+                                            "type": "object",
+                                            "properties": {
+                                                "_id": {
+                                                    "type": "string",
+                                                    "description": "Category id",
+                                                    "example": "638f2e279decac0a0108e6df"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "description": "Category name",
+                                                    "example": "Regular Income"
+                                                },
+                                                "type": {
+                                                    "type": "string",
+                                                    "description": "Category type",
+                                                    "example": "income"
+                                                }
+                                            }
+                                        },
+                                        "owner": {
+                                            "type": "object",
+                                            "properties": {
+                                                "_id": {
+                                                    "type": "string",
+                                                    "description": "User id",
+                                                    "example": "638f27d47a60c31e6313c06d"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "description": "User name",
+                                                    "example": "Chuck"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "description": "User email",
+                                                    "format": "email"
+                                                },
+                                                "balance": {
+                                                    "type": "number",
+                                                    "description": "User balance",
+                                                    "example": 3421.5
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "GetTransactionsBadRequest": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "status",
+                        "example": "error"
+                    },
+                    "code": {
+                        "type": "integer",
+                        "description": "status code",
+                        "example": 400
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "error message",
+                        "example": "Invalid page: Pages start at 1 and max at 2."
+                    }
+                }
+            },
+            "TransactionsRequest": {
+                "type": "object",
+                "required": ["type", "category", "amount", "date"],
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": "Transaction type",
+                        "enum": ["income", "expense"],
+                        "example": "income"
+                    },
+                    "category": {
+                        "type": "string",
+                        "description": "Category id",
+                        "example": "638f2e279decac0a0108e6df"
+                    },
+                    "amount": {
+                        "type": "number",
+                        "description": "Transaction amount",
+                        "example": 12.05
+                    },
+                    "date": {
+                        "type": "string",
+                        "description": "Transaction date",
+                        "example": "2022-12-01T00:00:00.000+00:00"
+                    },
+                    "comment": {
+                        "type": "string",
+                        "description": "Transaction amount",
+                        "example": "Some comment"
+                    }
+                }
+            },
+            "PostTransactionsResponse": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "status",
+                        "example": "success"
+                    },
+                    "code": {
+                        "type": "integer",
+                        "description": "status code",
+                        "example": 201
+                    },
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "_id": {
+                                "type": "string",
+                                "description": "Transaction id",
+                                "example": "638f6b4ecdcd2c0031204e75"
+                            },
+                            "type": {
+                                "type": "string",
+                                "description": "Transaction type",
+                                "example": "income"
+                            },
+
+                            "amount": {
+                                "type": "number",
+                                "description": "Transaction amount",
+                                "example": 100.05
+                            },
+                            "balance": {
+                                "type": "number",
+                                "description": "User's balance after transaction",
+                                "example": 2341.5
+                            },
+                            "comment": {
+                                "type": "string",
+                                "description": "Transaction comment",
+                                "example": "Some comment"
+                            },
+                            "date": {
+                                "type": "string",
+                                "description": "Transaction date",
+                                "example": "2022-12-06T16:18:22.502Z"
+                            },
+                            "month": {
+                                "type": "integer",
+                                "description": "Transaction month",
+                                "example": 12
+                            },
+                            "year": {
+                                "type": "integer",
+                                "description": "Transaction year",
+                                "example": 2022
+                            },
+                            "category": {
+                                "type": "object",
+                                "properties": {
+                                    "_id": {
+                                        "type": "string",
+                                        "description": "Category id",
+                                        "example": "638f2e279decac0a0108e6df"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "description": "Category name",
+                                        "example": "Regular Income"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "description": "Category type",
+                                        "example": "income"
+                                    }
+                                }
+                            },
+                            "owner": {
+                                "type": "object",
+                                "properties": {
+                                    "_id": {
+                                        "type": "string",
+                                        "description": "User id",
+                                        "example": "638f27d47a60c31e6313c06d"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "description": "User name",
+                                        "example": "Chuck"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "description": "User email",
+                                        "format": "email"
+                                    },
+                                    "balance": {
+                                        "type": "number",
+                                        "description": "User balance",
+                                        "example": 3421.5
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "PostTransactionsBadRequest": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "status",
+                        "example": "error"
+                    },
+                    "code": {
+                        "type": "integer",
+                        "description": "status code",
+                        "example": 400
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "error message",
+                        "example": "transaction validation failed"
                     }
                 }
             }
