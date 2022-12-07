@@ -11,6 +11,10 @@ const add = async (req, res) => {
         throw new BadRequest(`Category not found`);
     }
 
+    if (category.type !== body.type) {
+        throw new BadRequest(`The category type does not match the type in the request`);
+    }
+
     const user = await User.findById(id);
 
     const balance =
