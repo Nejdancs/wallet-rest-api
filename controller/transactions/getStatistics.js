@@ -2,12 +2,26 @@ const { Transaction } = require("../../models");
 
 const getStatistics = async (req, res) => {
   const { _id } = req.user;
-  const { month = new Date().getMonth(), year = new Date().getFullYear() } =
+  const { month = new Date().getMonth() + 1, year = new Date().getFullYear() } =
     req.body;
 
   const expenses = await Transaction.aggregate([
     { $match: { owner: _id, type: "expense", month, year } },
-    { $group: { _id: "$category", totalAmount: { $sum: "$amount" } } },
+    {
+      $lookup: {
+        from: "categories",
+        localField: "category",
+        foreignField: "_id",
+        as: "categoryName",
+      },
+    },
+    { $unwind: { path: "$category" } },
+    {
+      $group: {
+        _id: "$categoryName",
+        totalAmount: { $sum: "$amount" },
+      },
+    },
   ]);
 
   const totalExpenses = expenses.reduce((acc, elememt) => {
