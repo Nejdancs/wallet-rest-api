@@ -18,7 +18,7 @@ const getStatistics = async (req, res) => {
     { $unwind: { path: "$category" } },
     {
       $group: {
-        _id: { categoryName: "$categoryName" },
+        _id: "$categoryName",
         totalAmount: { $sum: "$amount" },
       },
     },
