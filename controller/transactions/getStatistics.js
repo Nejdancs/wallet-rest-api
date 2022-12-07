@@ -2,7 +2,7 @@ const { Transaction } = require("../../models");
 
 const getStatistics = async (req, res) => {
   const { _id } = req.user;
-  const { month = new Date().getMonth(), year = new Date().getFullYear() } =
+  const { month = new Date().getMonth() + 1, year = new Date().getFullYear() } =
     req.body;
 
   const expenses = await Transaction.aggregate([
