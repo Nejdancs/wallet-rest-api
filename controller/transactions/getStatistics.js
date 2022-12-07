@@ -7,7 +7,21 @@ const getStatistics = async (req, res) => {
 
   const expenses = await Transaction.aggregate([
     { $match: { owner: _id, type: "expense", month, year } },
-    { $group: { _id: "$category", totalAmount: { $sum: "$amount" } } },
+    {
+      $lookup: {
+        from: "categories",
+        localField: "category",
+        foreignField: "_id",
+        as: "categoryName",
+      },
+    },
+    { $unwind: { path: "$category" } },
+    {
+      $group: {
+        _id: { categoryName: "$categoryName" },
+        totalAmount: { $sum: "$amount" },
+      },
+    },
   ]);
 
   const totalExpenses = expenses.reduce((acc, elememt) => {
