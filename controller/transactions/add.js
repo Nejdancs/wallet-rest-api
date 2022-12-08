@@ -24,7 +24,7 @@ const add = async (req, res) => {
             allTransaction
                 .filter((trans) => {
                     const bodyDate = new Date(body.date);
-                    const dateCompare = trans.date < bodyDate;
+                    const dateCompare = trans.date <= bodyDate;
                     return dateCompare;
                 })
                 .reduce((acc, trans) => {
