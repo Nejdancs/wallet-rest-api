@@ -23,6 +23,10 @@
         {
             "name": "Transactions",
             "description": "Transactions endpoints"
+        },
+        {
+            "name": "Pidor",
+            "description": "Pidor endpoints"
         }
     ],
     "paths": {

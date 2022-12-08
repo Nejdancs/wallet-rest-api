@@ -45,6 +45,7 @@ const transactionSchema = Schema(
         },
         comment: {
             type: String,
+            default: "",
         },
     },
     { versionKey: false, timestamps: true }
@@ -59,7 +60,7 @@ const joiCreateTransactionSchema = Joi.object({
     category: Joi.string().required(),
     date: Joi.date().min("2000-01-01").required(),
     amount: Joi.number().min(0.01).required(),
-    comment: Joi.string().max(100),
+    comment: Joi.string().min(0).max(100),
 });
 
 const joiStatisticFilterSchema = Joi.object({
