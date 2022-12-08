@@ -22,10 +22,19 @@ const getStatistics = async (req, res) => {
         totalAmount: { $sum: "$amount" },
       },
     },
+    {
+      $project: {
+        categoryId: "$_id._id",
+        categoryName: "$_id.name",
+        amount: "$totalAmount",
+        _id: 0,
+      },
+    },
+    { $sort: { categoryName: 1 } },
   ]);
 
   const totalExpenses = expenses.reduce((acc, elememt) => {
-    return acc + elememt.totalAmount;
+    return acc + elememt.amount;
   }, 0);
 
   const income = await Transaction.aggregate([
@@ -38,6 +47,26 @@ const getStatistics = async (req, res) => {
     0
   );
 
+  const actDates = await Transaction.aggregate([
+    { $match: { owner: _id, type: "expense" } },
+    {
+      $group: {
+        _id: "$year",
+        monthes: { $addToSet: "$month" },
+      },
+    },
+    {
+      $project: {
+        year: "$_id",
+        monthes: 1,
+        _id: 0,
+      },
+    },
+    { $sort: { year: 1 } },
+  ]);
+
+  console.log(actDates);
+
   res.status(200).json({
     status: "success",
     code: 200,
@@ -45,6 +74,7 @@ const getStatistics = async (req, res) => {
       expenses,
       totalExpenses,
       totalIncome,
+      actDates,
     },
   });
 };
