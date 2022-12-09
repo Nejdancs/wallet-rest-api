@@ -3,14 +3,11 @@
     "info": {
         "version": "0.0.1",
         "title": "Wallet",
-        "description": "[ Base URL: https://wallet-api-nnb3.onrender.com ]"
+        "description": "[ Base URL: https://wallet-test.onrender.com/ ]"
     },
     "consumes": ["application/json"],
     "produces": ["application/json"],
-    "servers": [
-        { "url": "https://wallet-api-nnb3.onrender.com" },
-        { "url": "http://localhost:3001/" }
-    ],
+    "servers": [{ "url": "https://wallet-test.onrender.com" }, { "url": "http://localhost:3001/" }],
     "tags": [
         {
             "name": "Auth",
@@ -25,8 +22,8 @@
             "description": "Transactions endpoints"
         },
         {
-            "name": "Pidor",
-            "description": "Pidor endpoints"
+            "name": "Currency",
+            "description": "Currency endpoints"
         }
     ],
     "paths": {
@@ -363,6 +360,36 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/InvalidToken"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/currency": {
+            "get": {
+                "tags": ["Currency"],
+                "summary": "Get currency",
+                "parameters": [],
+
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CurrencyResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CurrencyError"
                                 }
                             }
                         }
@@ -1019,6 +1046,76 @@
                         "type": "string",
                         "description": "error message",
                         "example": "statistics validation failed"
+                    }
+                }
+            },
+
+            "CurrencyResponse": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "status",
+                        "example": "success"
+                    },
+                    "code": {
+                        "type": "integer",
+                        "description": "status code",
+                        "example": 200
+                    },
+                    "data": {
+                        "type": "object",
+
+                        "properties": {
+                            "currency": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "currencyA": {
+                                            "type": "string",
+                                            "description": "currencyA",
+                                            "example": "EUR"
+                                        },
+                                        "currencyB": {
+                                            "type": "string",
+                                            "description": "currencyB",
+                                            "example": "UAH"
+                                        },
+                                        "rateBuy": {
+                                            "type": "string",
+                                            "description": "buy",
+                                            "example": "38.35"
+                                        },
+                                        "rateSell": {
+                                            "type": "string",
+                                            "description": "sale",
+                                            "example": "39.84"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "CurrencyError": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "status",
+                        "example": "error"
+                    },
+                    "code": {
+                        "type": "integer",
+                        "description": "status code",
+                        "example": 500
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "error message",
+                        "example": "Server error"
                     }
                 }
             }
