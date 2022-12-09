@@ -3,11 +3,14 @@
     "info": {
         "version": "0.0.1",
         "title": "Wallet",
-        "description": "[ Base URL: https://wallet-test.onrender.com/ ]"
+        "description": "[ Base URL: https://wallet-api-nnb3.onrender.com/ ]"
     },
     "consumes": ["application/json"],
     "produces": ["application/json"],
-    "servers": [{ "url": "https://wallet-test.onrender.com" }, { "url": "http://localhost:3001/" }],
+    "servers": [
+        { "url": "https://wallet-api-nnb3.onrender.com/" },
+        { "url": "http://localhost:3001/" }
+    ],
     "tags": [
         {
             "name": "Auth",
