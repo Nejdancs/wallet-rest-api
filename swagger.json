@@ -706,7 +706,7 @@
                                         "type": {
                                             "type": "string",
                                             "description": "Transaction type",
-                                            "example": "income"
+                                            "example": "+"
                                         },
 
                                         "amount": {
@@ -727,62 +727,12 @@
                                         "date": {
                                             "type": "string",
                                             "description": "Transaction date",
-                                            "example": "2022-12-06T16:18:22.502Z"
-                                        },
-                                        "month": {
-                                            "type": "integer",
-                                            "description": "Transaction month",
-                                            "example": 12
-                                        },
-                                        "year": {
-                                            "type": "integer",
-                                            "description": "Transaction year",
-                                            "example": 2022
+                                            "example": "06.12.22"
                                         },
                                         "category": {
-                                            "type": "object",
-                                            "properties": {
-                                                "_id": {
-                                                    "type": "string",
-                                                    "description": "Category id",
-                                                    "example": "638f2e279decac0a0108e6df"
-                                                },
-                                                "name": {
-                                                    "type": "string",
-                                                    "description": "Category name",
-                                                    "example": "Regular Income"
-                                                },
-                                                "type": {
-                                                    "type": "string",
-                                                    "description": "Category type",
-                                                    "example": "income"
-                                                }
-                                            }
-                                        },
-                                        "owner": {
-                                            "type": "object",
-                                            "properties": {
-                                                "_id": {
-                                                    "type": "string",
-                                                    "description": "User id",
-                                                    "example": "638f27d47a60c31e6313c06d"
-                                                },
-                                                "name": {
-                                                    "type": "string",
-                                                    "description": "User name",
-                                                    "example": "Chuck"
-                                                },
-                                                "email": {
-                                                    "type": "string",
-                                                    "description": "User email",
-                                                    "format": "email"
-                                                },
-                                                "balance": {
-                                                    "type": "number",
-                                                    "description": "User balance",
-                                                    "example": 3421.5
-                                                }
-                                            }
+                                            "type": "string",
+                                            "description": "Category name",
+                                            "example": "Regular Income"
                                         }
                                     }
                                 }
@@ -867,7 +817,7 @@
                             "type": {
                                 "type": "string",
                                 "description": "Transaction type",
-                                "example": "income"
+                                "example": "+"
                             },
 
                             "amount": {
@@ -888,62 +838,13 @@
                             "date": {
                                 "type": "string",
                                 "description": "Transaction date",
-                                "example": "2022-12-06T16:18:22.502Z"
+                                "example": "06.12.22"
                             },
-                            "month": {
-                                "type": "integer",
-                                "description": "Transaction month",
-                                "example": 12
-                            },
-                            "year": {
-                                "type": "integer",
-                                "description": "Transaction year",
-                                "example": 2022
-                            },
+
                             "category": {
-                                "type": "object",
-                                "properties": {
-                                    "_id": {
-                                        "type": "string",
-                                        "description": "Category id",
-                                        "example": "638f2e279decac0a0108e6df"
-                                    },
-                                    "name": {
-                                        "type": "string",
-                                        "description": "Category name",
-                                        "example": "Regular Income"
-                                    },
-                                    "type": {
-                                        "type": "string",
-                                        "description": "Category type",
-                                        "example": "income"
-                                    }
-                                }
-                            },
-                            "owner": {
-                                "type": "object",
-                                "properties": {
-                                    "_id": {
-                                        "type": "string",
-                                        "description": "User id",
-                                        "example": "638f27d47a60c31e6313c06d"
-                                    },
-                                    "name": {
-                                        "type": "string",
-                                        "description": "User name",
-                                        "example": "Chuck"
-                                    },
-                                    "email": {
-                                        "type": "string",
-                                        "description": "User email",
-                                        "format": "email"
-                                    },
-                                    "balance": {
-                                        "type": "number",
-                                        "description": "User balance",
-                                        "example": 3421.5
-                                    }
-                                }
+                                "type": "string",
+                                "description": "Category name",
+                                "example": "Regular Income"
                             }
                         }
                     }

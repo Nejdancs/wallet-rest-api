@@ -1,5 +1,6 @@
 const { Transaction, User, Category } = require("../../models");
 const { BadRequest } = require("http-errors");
+const { createEmpData } = require("../../helpers");
 
 const add = async (req, res) => {
     const body = req.body;
@@ -55,10 +56,12 @@ const add = async (req, res) => {
     await user.save();
 
     const resData = await Transaction.findOne(newTransaction)
-        .populate("owner", "_id name email balance")
-        .populate("category", "_id name type");
+        .select("_id type category amount date balance comment")
+        .populate({ path: "category", transform: (doc) => doc.name });
 
-    res.status(201).json({ status: "success", code: 201, data: resData });
+    const empData = createEmpData(resData);
+
+    res.status(201).json({ status: "success", code: 201, data: empData });
 };
 
 module.exports = add;

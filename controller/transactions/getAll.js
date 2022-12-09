@@ -1,5 +1,6 @@
 const { Transaction } = require("../../models");
 const { BadRequest } = require("http-errors");
+const { createEmpData } = require("../../helpers");
 
 const getAll = async (req, res) => {
     const { id } = req.user;
@@ -28,11 +29,13 @@ const getAll = async (req, res) => {
         .select("_id type category amount date balance comment")
         .populate({ path: "category", transform: (doc) => doc.name });
 
+    const empData = data.map((trans) => createEmpData(trans));
+
     const result = {
         page: Number(page),
         total_pages: totalPages,
         total_results: count,
-        result: data,
+        result: empData,
     };
 
     res.status(200).json({ status: "success", code: 200, data: result });
