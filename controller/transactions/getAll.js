@@ -25,8 +25,8 @@ const getAll = async (req, res) => {
         skip,
         limit: Number(limit),
     })
-        .populate("owner", "_id name email balance")
-        .populate("category", "_id name type");
+        .select("_id type category amount date balance comment")
+        .populate({ path: "category", transform: (doc) => doc.name });
 
     const result = {
         page: Number(page),
