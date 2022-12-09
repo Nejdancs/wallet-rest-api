@@ -1002,12 +1002,23 @@
                                 "items": {
                                     "type": "object",
                                     "properties": {
-                                        "_id": {
-                                            "type": "string",
-                                            "description": "Category id",
-                                            "example": "638f2e279decac0a0108e6d5"
+                                        "categoryId": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string",
+                                                "description": "Category id",
+                                                "example": "638f2e279decac0a0108e6d5"
+                                            }
                                         },
-                                        "totalAmount": {
+                                        "categoryName": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string",
+                                                "description": "Category name",
+                                                "example": "Main expenses"
+                                            }
+                                        },
+                                        "amount": {
                                             "type": "number",
                                             "description": "Total amount",
                                             "example": 1214.1
@@ -1024,6 +1035,27 @@
                                 "type": "number",
                                 "description": "Total income",
                                 "example": 1214.1
+                            },
+                            "actDates": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "monthes": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "integer",
+                                                "description": "Month",
+                                                "example": 12
+                                            }
+                                        },
+                                        "year": {
+                                            "type": "integer",
+                                            "description": "Year",
+                                            "example": 2022
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
