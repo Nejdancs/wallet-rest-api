@@ -314,6 +314,66 @@
                         }
                     }
                 }
+            },
+            "post": {
+                "tags": ["Transactions"],
+                "summary": "Create categories transactions",
+                "parameters": [],
+                "security": [{ "Bearer": [] }],
+                "requestBody": {
+                    "description": "Categories object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PostCategoriesRequest"
+                            }
+                        }
+                    }
+                },
+
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PostCategoriesResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PostCategoriesBadRequest"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict data is already exist",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ConflictCategoriesRequest"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Token expired or invalid",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InvalidToken"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/api/transactions/statistics": {
@@ -372,7 +432,7 @@
                 "tags": ["Currency"],
                 "summary": "Get currency",
                 "parameters": [],
-
+                "security": [{ "Bearer": [] }],
                 "responses": {
                     "200": {
                         "description": "Successful operation",
@@ -960,6 +1020,107 @@
                                 }
                             }
                         }
+                    }
+                }
+            },
+            "PostCategoriesRequest": {
+                "type": "object",
+                "required": ["type", "name"],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Category name",
+                        "minLength": 1,
+                        "maxLength": 20,
+                        "example": "Main expenses"
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "Category type",
+                        "enum": ["income", "expense"],
+                        "example": "income"
+                    }
+                }
+            },
+
+            "PostCategoriesResponse": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "status",
+                        "example": "success"
+                    },
+                    "code": {
+                        "type": "integer",
+                        "description": "status code",
+                        "example": 201
+                    },
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "_id": {
+                                "type": "string",
+                                "description": "Category id",
+                                "example": "638f2e279decac0a0108e6d5"
+                            },
+                            "name": {
+                                "type": "string",
+                                "description": "Category name",
+                                "example": "Main expenses"
+                            },
+                            "type": {
+                                "type": "string",
+                                "description": "Category type",
+                                "example": "expense"
+                            },
+                            "owner": {
+                                "type": "string",
+                                "description": "Owner id",
+                                "example": "638f27d47a60c31e6313c06d"
+                            }
+                        }
+                    }
+                }
+            },
+            "PostCategoriesBadRequest": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "status",
+                        "example": "error"
+                    },
+                    "code": {
+                        "type": "integer",
+                        "description": "status code",
+                        "example": 400
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "error message",
+                        "example": "transaction validation failed"
+                    }
+                }
+            },
+
+            "ConflictCategoriesRequest": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "status",
+                        "example": "error"
+                    },
+                    "code": {
+                        "type": "integer",
+                        "description": "status code",
+                        "example": 409
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "error message",
+                        "example": "Category with name already exist"
                     }
                 }
             },
