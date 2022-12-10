@@ -70,6 +70,7 @@ const joiLoginSchema = Joi.object({
     email: Joi.string().pattern(emailRegExp).required().messages({
         "string.pattern.base": `Please fill a valid email address`,
     }),
+    password: Joi.string().required(),
 });
 
 const User = model("user", userSchema);
