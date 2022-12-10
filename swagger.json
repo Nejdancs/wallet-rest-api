@@ -189,20 +189,7 @@
             "get": {
                 "tags": ["Transactions"],
                 "summary": "Get all transactions",
-                "parameters": [
-                    {
-                        "in": "query",
-                        "name": "page",
-                        "description": "Current page",
-                        "default": 1
-                    },
-                    {
-                        "in": "query",
-                        "name": "limit",
-                        "description": "Limit per page",
-                        "default": 5
-                    }
-                ],
+                "parameters": [],
                 "security": [{ "Bearer": [] }],
 
                 "responses": {
@@ -216,16 +203,7 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad request (invalid query params)",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/GetTransactionsBadRequest"
-                                }
-                            }
-                        }
-                    },
+
                     "401": {
                         "description": "Token expired or invalid",
                         "content": {
@@ -765,66 +743,45 @@
                         "example": 200
                     },
                     "data": {
-                        "type": "object",
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "_id": {
+                                    "type": "string",
+                                    "description": "Transaction id",
+                                    "example": "638f6b4ecdcd2c0031204e75"
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "description": "Transaction type",
+                                    "example": "+"
+                                },
 
-                        "properties": {
-                            "page": {
-                                "type": "integer",
-                                "description": "Current page",
-                                "example": 1
-                            },
-                            "total_pages": {
-                                "type": "integer",
-                                "description": "Total pages",
-                                "example": 4
-                            },
-                            "total_results": {
-                                "type": "integer",
-                                "description": "Total results",
-                                "example": 20
-                            },
-                            "result": {
-                                "type": "array",
-                                "items": {
-                                    "type": "object",
-                                    "properties": {
-                                        "_id": {
-                                            "type": "string",
-                                            "description": "Transaction id",
-                                            "example": "638f6b4ecdcd2c0031204e75"
-                                        },
-                                        "type": {
-                                            "type": "string",
-                                            "description": "Transaction type",
-                                            "example": "+"
-                                        },
-
-                                        "amount": {
-                                            "type": "number",
-                                            "description": "Transaction amount",
-                                            "example": 100.05
-                                        },
-                                        "balance": {
-                                            "type": "number",
-                                            "description": "User's balance after transaction",
-                                            "example": 2341.5
-                                        },
-                                        "comment": {
-                                            "type": "string",
-                                            "description": "Transaction comment",
-                                            "example": "Some comment"
-                                        },
-                                        "date": {
-                                            "type": "string",
-                                            "description": "Transaction date",
-                                            "example": "06.12.22"
-                                        },
-                                        "category": {
-                                            "type": "string",
-                                            "description": "Category name",
-                                            "example": "Regular Income"
-                                        }
-                                    }
+                                "amount": {
+                                    "type": "number",
+                                    "description": "Transaction amount",
+                                    "example": 100.05
+                                },
+                                "balance": {
+                                    "type": "number",
+                                    "description": "User's balance after transaction",
+                                    "example": 2341.5
+                                },
+                                "comment": {
+                                    "type": "string",
+                                    "description": "Transaction comment",
+                                    "example": "Some comment"
+                                },
+                                "date": {
+                                    "type": "string",
+                                    "description": "Transaction date",
+                                    "example": "06.12.22"
+                                },
+                                "category": {
+                                    "type": "string",
+                                    "description": "Category name",
+                                    "example": "Regular Income"
                                 }
                             }
                         }

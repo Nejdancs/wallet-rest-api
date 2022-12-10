@@ -5,9 +5,13 @@ const addCategory = async (req, res) => {
     const body = req.body;
     const { id } = req.user;
 
-    const category = await Category.findOne({ name: body.name, owner: id });
+    const category = await Category.findOne({
+        name: body.name,
+        $or: [{ owner: id }, { owner: { $exists: false } }],
+        type: body.type,
+    });
 
-    if (category && category.type === body.type) {
+    if (category) {
         throw new Conflict(`Category with name:${category.name} already exist`);
     }
 
