@@ -55,10 +55,10 @@ userSchema.methods.setToken = function (token) {
 userSchema.post("save", handleSaveErrors);
 
 const joiRegisterSchema = Joi.object({
-    email: Joi.string().pattern(emailRegExp).min(10).max(63).required().messages({
+    email: Joi.string().pattern(emailRegExp).required().messages({
         "string.pattern.base": `Please fill a valid email address`,
     }),
-    password: Joi.string().pattern(passwordRegExp).min(6).max(12).required().messages({
+    password: Joi.string().pattern(passwordRegExp).min(6).max(16).required().messages({
         "string.pattern.base": `Please fill a valid password`,
     }),
     name: Joi.string().pattern(nameRegExp).min(1).max(12).required().messages({
@@ -67,11 +67,8 @@ const joiRegisterSchema = Joi.object({
 });
 
 const joiLoginSchema = Joi.object({
-    email: Joi.string().pattern(emailRegExp).min(10).max(63).required().messages({
+    email: Joi.string().pattern(emailRegExp).required().messages({
         "string.pattern.base": `Please fill a valid email address`,
-    }),
-    password: Joi.string().pattern(passwordRegExp).min(6).max(12).required().messages({
-        "string.pattern.base": `Please fill a valid password`,
     }),
 });
 
