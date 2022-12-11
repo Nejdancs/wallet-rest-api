@@ -47,9 +47,7 @@ const add = async (req, res) => {
     }
 
     const balance =
-        body.type === "income"
-            ? user.balance + body.amount.toFixed(2)
-            : user.balance - body.amount.toFixed(2);
+        body.type === "income" ? user.balance + body.amount : user.balance - body.amount;
 
     user.balance = balance.toFixed(2);
 
