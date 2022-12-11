@@ -47,11 +47,18 @@ const add = async (req, res) => {
     }
 
     const balance =
-        body.type === "income" ? user.balance + body.amount : user.balance - body.amount;
+        body.type === "income"
+            ? user.balance + body.amount.toFixed(2)
+            : user.balance - body.amount.toFixed(2);
 
     user.balance = balance.toFixed(2);
 
-    const newTransaction = await Transaction.create({ ...body, owner: id, balance: user.balance });
+    const newTransaction = await Transaction.create({
+        ...body,
+        amount: body.amount.toFixed(2),
+        owner: id,
+        balance: user.balance,
+    });
 
     await user.save();
 
