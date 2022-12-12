@@ -8,7 +8,7 @@ const fetchCurrency = async () => {
             980: "UAH",
         };
 
-        const { data } = await axios.get("https://api.monobank.ua/bank/currency");
+        const { data } = await axios.get("https://api.monobnk.ua/bank/currency");
         const slicedData = data.slice(0, 3);
 
         const result = slicedData.map((el) => ({
@@ -23,7 +23,7 @@ const fetchCurrency = async () => {
 
     const privatApi = async () => {
         const { data } = await axios.get(
-            "https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=11"
+            "https://api.privatank.ua/p24api/pubinfo?exchange&coursid=11"
         );
 
         const result = data

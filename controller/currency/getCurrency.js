@@ -8,7 +8,7 @@ let attempts = 0;
 const getCurrency = async (_, res, next) => {
     const timePassed = (lastUpdateDate) => {
         const timeDifference = Date.now() - lastUpdateDate;
-        const result = timeDifference >= 60000;
+        const result = timeDifference >= 3600000;
         return result;
     };
 
@@ -16,11 +16,13 @@ const getCurrency = async (_, res, next) => {
         try {
             if (!MEMO_DATA || timePassed(lastUpdateDate)) {
                 const data = await fetchCurrency();
+                console.log("fetch");
 
                 MEMO_DATA = data;
                 lastUpdateDate = Date.now();
             }
 
+            console.log("response");
             res.status(200).json({
                 status: "success",
                 code: 200,
@@ -37,6 +39,7 @@ const getCurrency = async (_, res, next) => {
                 console.log(error);
                 next(GatewayTimeout("Timeout"));
             } else {
+                console.log("Timeout");
                 setTimeout(() => fetch(), 1000);
             }
         }
