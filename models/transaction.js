@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model, Decimal128, Types } = require("mongoose");
 const Joi = require("joi");
 const { handleSaveErrors, formattedDate } = require("../helpers");
 
@@ -41,14 +41,22 @@ const transactionSchema = Schema(
             min: 2000,
         },
         balance: {
-            type: Number,
+            type: Decimal128,
+            get: (v) => new Types.Decimal128((+v.toString()).toFixed(2)),
+            set: (v) => new Types.Decimal128(v.toFixed(2)),
         },
         comment: {
             type: String,
             default: "",
         },
     },
-    { versionKey: false, timestamps: true }
+    {
+        versionKey: false,
+        timestamps: true,
+        toJSON: {
+            getters: true,
+        },
+    }
 );
 
 transactionSchema.pre("save", formattedDate);

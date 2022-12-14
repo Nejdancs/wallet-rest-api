@@ -12,6 +12,7 @@ function createEmpData(data) {
 
     empData.type = empType;
     empData.date = empDate;
+    empData.balance = +(+empData.balance.toString()).toFixed(2);
     return { ...empData, type: empType, date: empDate };
 }
 

@@ -6,6 +6,10 @@ const add = async (req, res) => {
     const body = req.body;
     const { id } = req.user;
 
+    const normalizeNumber = (num) => {
+        return (+num).toFixed(2) * 100;
+    };
+
     const category = await Category.findById(body.category);
 
     if (!category) {
@@ -30,13 +34,13 @@ const add = async (req, res) => {
                 })
                 .reduce((acc, trans) => {
                     if (trans.type === "expense") {
-                        return acc - trans.amount;
+                        return acc - normalizeNumber(trans.amount);
                     } else if (trans.type === "income") {
-                        return acc + trans.amount;
+                        return acc + normalizeNumber(trans.amount);
                     }
                     return acc;
                 }, 0) -
-                body.amount <
+                normalizeNumber(body.amount) <
             0;
 
         if (isBalanceLessZero) {
@@ -61,24 +65,27 @@ const add = async (req, res) => {
         owner: id,
     });
 
-    const totalAmount = find.reduce((acc, trans) => {
-        if (trans.type === "income") {
-            return acc + trans.amount;
-        } else {
-            return acc - trans.amount;
-        }
-    }, 0);
+    const totalAmount =
+        find.reduce((acc, trans) => {
+            if (trans.type === "income") {
+                return acc + normalizeNumber(trans.amount);
+            } else {
+                return acc - normalizeNumber(trans.amount);
+            }
+        }, 0) / 100;
 
     const balance =
-        body.type === "income" ? user.balance + body.amount : user.balance - body.amount;
+        (body.type === "income"
+            ? normalizeNumber(user.balance) + normalizeNumber(body.amount)
+            : normalizeNumber(user.balance) - normalizeNumber(body.amount)) / 100;
 
-    user.balance = balance.toFixed(2);
+    user.balance = balance;
 
     await Transaction.create({
         ...body,
         amount: body.amount.toFixed(2),
         owner: id,
-        balance: user.balance - totalAmount,
+        balance: (normalizeNumber(user.balance) - normalizeNumber(totalAmount)) / 100,
     });
 
     await user.save();
