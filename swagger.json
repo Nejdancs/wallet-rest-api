@@ -9,7 +9,10 @@
     "produces": ["application/json"],
     "servers": [
         { "url": "https://wallet-api-nnb3.onrender.com/" },
-        { "url": "http://localhost:3001/" }
+        { "url": "http://localhost:3001/" },
+        {
+            "url": "https://nejdancs-laughing-rotary-phone-pqvjgwxvgp4c6v6p-3001.preview.app.github.dev/"
+        }
     ],
     "tags": [
         {

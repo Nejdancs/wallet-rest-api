@@ -48,7 +48,7 @@ const getStatistics = async (req, res) => {
   );
 
   const actDates = await Transaction.aggregate([
-    { $match: { owner: _id, type: "expense" } },
+    { $match: { owner: _id } },
     {
       $group: {
         _id: "$year",
