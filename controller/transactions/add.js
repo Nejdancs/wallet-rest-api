@@ -26,20 +26,17 @@ const add = async (req, res) => {
         const allTransaction = await Transaction.find({ owner: id });
 
         const isBalanceLessZero =
-            allTransaction
-                .filter((trans) => {
-                    const bodyDate = new Date(body.date);
-                    const dateCompare = trans.date <= bodyDate;
-                    return dateCompare;
-                })
-                .reduce((acc, trans) => {
-                    if (trans.type === "expense") {
-                        return acc - normalizeNumber(trans.amount);
-                    } else if (trans.type === "income") {
-                        return acc + normalizeNumber(trans.amount);
-                    }
-                    return acc;
-                }, 0) -
+            allTransaction.reduce((acc, trans) => {
+                const bodyDate = new Date(body.date);
+                const dateCompare = trans.date <= bodyDate;
+
+                if (trans.type === "expense") {
+                    return acc - normalizeNumber(trans.amount);
+                } else if (dateCompare && trans.type === "income") {
+                    return acc + normalizeNumber(trans.amount);
+                }
+                return acc;
+            }, 0) -
                 normalizeNumber(body.amount) <
             0;
 
