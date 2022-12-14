@@ -46,27 +46,65 @@ const add = async (req, res) => {
         }
     }
 
+    // const test = allTransaction.filter((trans) => {
+    //     const bodyDate = new Date(body.date);
+    //     const dateCompare = trans.date >= bodyDate;
+    //     // const createdDateCompare = trans.createdAt >= new Date(Date.now());
+
+    //     return dateCompare;
+    // });
+
+    const bodyDate = new Date(body.date);
+
+    const find = await Transaction.find({
+        date: { $gt: bodyDate },
+        owner: id,
+    });
+
+    const totalAmount = find.reduce((acc, trans) => {
+        if (trans.type === "income") {
+            return acc + trans.amount;
+        } else {
+            return acc - trans.amount;
+        }
+    }, 0);
+
     const balance =
         body.type === "income" ? user.balance + body.amount : user.balance - body.amount;
 
     user.balance = balance.toFixed(2);
 
-    const newTransaction = await Transaction.create({
+    await Transaction.create({
         ...body,
         amount: body.amount.toFixed(2),
         owner: id,
-        balance: user.balance,
+        balance: user.balance - totalAmount,
     });
 
     await user.save();
 
-    const resData = await Transaction.findOne(newTransaction)
-        .select("_id type category amount date balance comment")
+    await Transaction.updateMany(
+        {
+            date: { $gt: bodyDate },
+            owner: id,
+        },
+
+        {
+            $inc: { balance: body.type === "income" ? body.amount : -body.amount },
+        }
+    );
+
+    const resData = await Transaction.find({ owner: id })
+        .select("_id type category amount date balance comment createdAt")
         .populate({ path: "category", transform: (doc) => doc.name });
 
-    const empData = createEmpData(resData);
+    const empData = resData.map((trans) => createEmpData(trans));
 
-    res.status(201).json({ status: "success", code: 201, data: empData });
+    res.status(201).json({
+        status: "success",
+        code: 201,
+        data: { owner: { balance: user.balance }, result: empData },
+    });
 };
 
 module.exports = add;

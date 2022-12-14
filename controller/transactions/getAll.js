@@ -5,7 +5,7 @@ const getAll = async (req, res) => {
     const { id } = req.user;
 
     const data = await Transaction.find({ owner: id })
-        .select("_id type category amount date balance comment")
+        .select("_id type category amount date balance comment  createdAt")
         .populate({ path: "category", transform: (doc) => doc.name });
 
     const empData = data.map((trans) => createEmpData(trans));
